@@ -180,33 +180,38 @@ def main():
 
 		current_date = datetime.now().strftime('%Y-%m-%d')
 		run_number = 1
-		folder_name = f"/home/amir/young/videos/{current_date}_RUN{run_number}"
-
-		while os.path.exists(folder_name):
-			run_number += 1
-			folder_name = f"/home/amir/young/videos/{current_date}_RUN{run_number}"
-
-		os.makedirs(folder_name)
-		# os.makedirs(f"{folder_name}/A")
-		# os.makedirs(f"{folder_name}/B")
-		logging.info(f"Folder created: {current_date}_RUN{run_number}")
-
+		
 		photo_number = 1
 		recording = False
 
 		while True:
 			button_state = button_line.get_value()
 			if button_state == 1:
+
+				folder_name = f"/home/amir/young/videos/{current_date}_RUN{run_number}"
+
+				while os.path.exists(folder_name):
+					run_number += 1
+					folder_name = f"/home/amir/young/videos/{current_date}_RUN{run_number}"
+
+				os.makedirs(folder_name)
+
+				logging.info(f"Folder created: {current_date}_RUN{run_number}")
+
+				
 				logging.info(f"{folder_name}/{current_date}_RUN{run_number}__{photo_number}.h264")
 				output = FfmpegOutput(f"{folder_name}/{current_date}_RUN{run_number}__{photo_number}.mp4")
 
-				#turn on fog
-				toggleFog(IR_remote)
+
 				
 				#start recording
 				picam0.start_recording(encoder, output)
 				green_led_line.set_value(1)
 
+				sleep(1)
+
+				#turn on fog
+				toggleFog(IR_remote)
 
 				#waits 
 				sleep(4)
@@ -234,11 +239,7 @@ def main():
 					logging.warning(f"File not found: {video_path}")
 
 				photo_number += 1
-				while os.path.exists(folder_name):
-					run_number += 1
-					folder_name = f"/home/amir/young/videos/{current_date}_RUN{run_number}"
-				os.makedirs(folder_name)
-				logging.info(f"Folder created: {current_date}_RUN{run_number}")
+
 
 
 				
